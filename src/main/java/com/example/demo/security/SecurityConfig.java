@@ -32,15 +32,16 @@ public class SecurityConfig {
     // bean defaultSecurityFilterChain defines how different URL patterns are authorized and handled
     // by Spring Security filters
 
+
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception{
         http.
                 authorizeHttpRequests(authorizeHttpRequest -> //method to specify which request should be authorized
                         authorizeHttpRequest
-                                .requestMatchers("/admin/**").permitAll() //Admin access // method requestMatcher() to specify the criteria that a request must meet in order to be authorized
-                                .requestMatchers("/doctor/**").hasRole("DOCTOR") //Doctor access //hasRole() to specify access rule to users who have a specific role
-                                .anyRequest().authenticated() //any other request should be authenticated
-                );
+                                .anyRequest().permitAll()
+                )
+                .csrf().disable();
         return http.build();
     }
+
 }

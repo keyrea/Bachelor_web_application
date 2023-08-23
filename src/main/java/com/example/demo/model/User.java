@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "User")
 @Data
 public class User {
 
@@ -50,12 +51,27 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @ManyToOne
+    @JoinColumn(name = "hospital_id")
+    private Hospital hospital;
+
     @ManyToMany
-    @JoinTable(
-            name = "User2Hospital",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "hospital_id")
+    @JoinTable( // specify Join table that manages relationships
+            name = "User2Services", // name of Join table in database
+            joinColumns = @JoinColumn(name = "user_id"), // column mapping for User entity
+            inverseJoinColumns = @JoinColumn(name = "service_id") //column mapping for Services entity
     )
-    private List<Hospital> hospitals = new ArrayList<>();
+    private List<Services> services = new ArrayList<>();
+
+    @OneToMany(mappedBy = "doctor")
+    private List<Appoitment> managedAppoitments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "patient")
+    private List<Appoitment> appoitments = new ArrayList<>();
+
+    // TODO: create "picture" attribute
+    // TODO: create "city" attribute
+    // TODO: create "education" attribute
+    // TODO: create "experience" attribute
 
 }

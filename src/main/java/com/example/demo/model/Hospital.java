@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "hospital")
+@Table(name = "Hospital")
 @Data
 public class Hospital {
 
@@ -34,6 +34,9 @@ public class Hospital {
     @Column(name = "street", nullable = false)
     private String street;
 
-    @ManyToMany(mappedBy = "hospitals")
-    private List<User> users = new ArrayList<>();
+    @OneToMany(mappedBy = "hospital")
+    private List<User> doctors = new ArrayList<>();
+
+    // TODO: create "picture" attribute
+
 }
