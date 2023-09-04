@@ -8,6 +8,7 @@ import com.example.demo.repository.ServiceRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,7 +28,12 @@ public class PatientService {
     @Autowired
     private ServiceRepository serviceRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public User createOrUpdatePatient(User patient) {
+        String encodedPassword = passwordEncoder.encode(patient.getPassword());
+        patient.setPassword(encodedPassword);
         return userRepository.save(patient);
     }
 

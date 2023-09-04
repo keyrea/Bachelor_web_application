@@ -6,6 +6,7 @@ import com.example.demo.model.User;
 import com.example.demo.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -15,24 +16,26 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/patient")
+@PreAuthorize("hasRole('PATIENT')")
 public class PatientController {
 
     @Autowired
     private PatientService patientService;
 
-    @PostMapping("/profile")
-    public ResponseEntity<User> createOrUpdatePatientProfile(@RequestBody User patient) {
-        User createOrUpdatedPatient = patientService.createOrUpdatePatient(patient);
-        return ResponseEntity.ok(createOrUpdatedPatient);
+    @PutMapping("/profile/update/{patientId}")
+    public User updatePatient(@PathVariable Long patientId, @RequestBody User patient) {
+        patient.setId(patientId); // Set the id for Update
+        return patientService.createOrUpdatePatient(patient);
     }
 
-    @DeleteMapping("/profile/{patientId}")
+
+    @DeleteMapping("/profile/delete/{patientId}")
     public ResponseEntity<Void> deletePatientProfile(@PathVariable Long patientId) {
         patientService.deletePatient(patientId);
         return ResponseEntity.noContent().build(); // return ResponseEntity with HTTP status 204
     }
 
-    @PostMapping("/{patientId}/appoitments/{appoitmentId}/reserve")
+    @PostMapping("/{patientId}/appointments/{appoitmentId}/reserve")
     public ResponseEntity<Appoitment> reserveAppoitment(
             @PathVariable Long patientId,
             @PathVariable Long appoitmentId,
@@ -44,7 +47,7 @@ public class PatientController {
 
     }
 
-    @PutMapping("/{patientId}/appoitments/{appoitmentId}")
+    @PutMapping("/{patientId}/appointments/{appoitmentId}/update")
     public ResponseEntity<Appoitment> updateReservationByPatient(
             @PathVariable Long patientId,
             @PathVariable Long appoitmentId,
@@ -66,7 +69,7 @@ public class PatientController {
         return ResponseEntity.ok(updatedAppointment);
     }
 
-    @PostMapping("/{patientId}/appoitments/{appoitmentId}/cancel")
+    @PostMapping("/{patientId}/appointments/{appoitmentId}/cancel")
     public ResponseEntity<Appoitment> cancelReservation(
             @PathVariable Long patientId,
             @PathVariable Long appoitmentId) {

@@ -5,6 +5,7 @@ import com.example.demo.model.User;
 import com.example.demo.repository.AppoitmentRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +19,12 @@ public class AdminService {
     @Autowired
     private AppoitmentRepository appoitmentRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public User createDoctor(User doctor) {
+        String encodedPassword = passwordEncoder.encode(doctor.getPassword());
+        doctor.setPassword(encodedPassword);
         return userRepository.save(doctor);
     }
 

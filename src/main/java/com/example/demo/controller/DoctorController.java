@@ -5,6 +5,7 @@ import com.example.demo.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
@@ -17,12 +18,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/doctor")
+@PreAuthorize("hasRole('DOCTOR')")
 public class DoctorController {
 
     @Autowired
     private DoctorService doctorService;
 
-    @PutMapping("/{doctorId}/appoitments/{appoitmentId}")
+    @PutMapping("/{doctorId}/appointments/{appoitmentId}")
     public ResponseEntity<Appoitment> updateReservationByDoctor(
             @PathVariable Long doctorId,
             @PathVariable Long appoitmentId,

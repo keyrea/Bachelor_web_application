@@ -6,6 +6,7 @@ import com.example.demo.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/admin")
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
     @Autowired
@@ -43,7 +45,7 @@ public class AdminController {
         adminService.deleteDoctor(id);
     }
 
-    @PostMapping("/appoitments")
+    @PostMapping("/create/appointments")
     public ResponseEntity<Appoitment> createOrUpdateAppoitment(@RequestBody Appoitment appoitment) {
         Appoitment savedAppoitment = adminService.createOrUpdateAppoitment(appoitment);
         return ResponseEntity.ok(savedAppoitment);
