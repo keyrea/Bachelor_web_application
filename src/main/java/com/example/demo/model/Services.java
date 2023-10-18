@@ -17,6 +17,6 @@ public class Services {
     private String serviceName;
 
     @OneToOne(mappedBy = "service")
-    private Appoitment appoitment;
+    private Appointment appointment;
 
 }

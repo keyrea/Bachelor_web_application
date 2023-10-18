@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -7,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Hospital")
+@Table(name = "Organization")
 @Data
-public class Hospital {
+public class Organization {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,9 +35,8 @@ public class Hospital {
     @Column(name = "street", nullable = false)
     private String street;
 
-    @OneToMany(mappedBy = "hospital")
-    private List<User> doctors = new ArrayList<>();
-
-    // TODO: create "picture" attribute
+    @OneToMany(mappedBy = "organization")
+    @JsonIgnore
+    private List<User> physicians = new ArrayList<>();
 
 }

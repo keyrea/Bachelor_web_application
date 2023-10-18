@@ -1,6 +1,6 @@
 package com.example.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -30,11 +30,26 @@ public class User {
     @Column(name = "nationality", nullable = true)
     private String nationality;
 
+    @Column(name = "city", nullable = true)
+    private String city;
+
+    @Column(name = "postal_code", nullable = true)
+    private String postalCode;
+
+    @Column(name = "street", nullable = true)
+    private String street;
+
     @Column(name = "speciality", nullable = true)
     private String speciality;
 
     @Column(name = "language", nullable = true)
     private String language;
+
+    @Column(name = "education", nullable = true)
+    private String education;
+
+    @Column(name = "experience", nullable = true)
+    private String experience;
 
     @Column(name = "email", nullable = true)
     private String email;
@@ -52,8 +67,8 @@ public class User {
     private String password;
 
     @ManyToOne
-    @JoinColumn(name = "hospital_id")
-    private Hospital hospital;
+    @JoinColumn(name = "organization_id")
+    private Organization organization;
 
     @ManyToMany
     @JoinTable( // specify Join table that manages relationships
@@ -63,15 +78,11 @@ public class User {
     )
     private List<Services> services = new ArrayList<>();
 
-    @OneToMany(mappedBy = "doctor")
-    private List<Appoitment> managedAppoitments = new ArrayList<>();
+    @OneToMany(mappedBy = "physician")
+    private List<Appointment> managedAppointments = new ArrayList<>();
 
     @OneToMany(mappedBy = "patient")
-    private List<Appoitment> appoitments = new ArrayList<>();
-
-    // TODO: create "picture" attribute
-    // TODO: create "city" attribute
-    // TODO: create "education" attribute
-    // TODO: create "experience" attribute
+    @JsonIgnore
+    private List<Appointment> appointments = new ArrayList<>();
 
 }

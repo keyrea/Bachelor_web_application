@@ -1,16 +1,16 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 
 @Entity
-@Table(name = "Appoitment")
+@Table(name = "Appointment")
 @Data
-public class Appoitment {
+public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +27,10 @@ public class Appoitment {
     @JoinColumn(name = "patient_id")
     private User patient;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "doctor_id")
-    private User doctor;
+    @ManyToOne
+    @JoinColumn(name = "physician_id")
+    @JsonBackReference
+    private User physician;
 
     @OneToOne
     @JoinColumn(name = "service_id")
