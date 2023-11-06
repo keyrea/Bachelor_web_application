@@ -75,9 +75,15 @@ public class JwtTokenUtil implements Serializable {
     }
 
     // generate token for user
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(UserDetails userDetails, Long organizationId){
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+        if(organizationId != null){
+            claims.put("organization_id",organizationId);
+        }
+        String generatedToken = createToken(claims, userDetails.getUsername());
+        System.out.println("Generated token "+generatedToken);
+
+        return generatedToken;
     }
 
     // create token using provided claims and subject (username)
@@ -85,10 +91,13 @@ public class JwtTokenUtil implements Serializable {
 
         System.out.println("Token Expiration Time: " + new Date(System.currentTimeMillis() + expiration));
 
-        return Jwts.builder().setClaims(claims).setSubject(subject)
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+expiration))
-                .signWith(SignatureAlgorithm.HS256,secret).compact();
+                .signWith(SignatureAlgorithm.HS256,secret)
+                .compact();
     }
 
     // validate token for user
@@ -96,4 +105,11 @@ public class JwtTokenUtil implements Serializable {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
+    public Long extractOrganizationId(String token){
+        final Claims claims = extractAllClaims(token);
+        Object organizationId = claims.get("organization_id");
+        return organizationId != null ? Long.valueOf(organizationId.toString()) : null;
+    }
+
 }

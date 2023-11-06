@@ -1,6 +1,8 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -25,11 +27,12 @@ public class Appointment {
 
     @ManyToOne
     @JoinColumn(name = "patient_id")
+    @JsonIgnore
     private User patient;
 
     @ManyToOne
     @JoinColumn(name = "physician_id")
-    @JsonBackReference
+    @JsonIgnore
     private User physician;
 
     @OneToOne

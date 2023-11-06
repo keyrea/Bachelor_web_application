@@ -42,7 +42,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String jwtToken = null;
 
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-            jwtToken = requestTokenHeader.substring(7);
+            jwtToken = requestTokenHeader.substring("Bearer ".length());
+            System.out.println("JWT Token "+jwtToken);
             try {
                 username = jwtTokenUtil.extractUsername(jwtToken);
             } catch (IllegalArgumentException e) {
@@ -57,6 +58,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = this.userDetailsServiceImpl.loadUserByUsername(username);
+
+            // extract organizationId from claims
+            Long organizationId = jwtTokenUtil.extractOrganizationId(jwtToken);
 
             // if token is valid configure Spring Security to manually set
             // authentication

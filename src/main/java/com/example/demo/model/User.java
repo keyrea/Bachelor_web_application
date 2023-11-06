@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -79,6 +80,7 @@ public class User {
     private List<Services> services = new ArrayList<>();
 
     @OneToMany(mappedBy = "physician")
+    @JsonIgnore
     private List<Appointment> managedAppointments = new ArrayList<>();
 
     @OneToMany(mappedBy = "patient")

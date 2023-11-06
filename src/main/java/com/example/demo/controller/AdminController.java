@@ -43,7 +43,7 @@ public class AdminController {
         }
 
         catch (MissingRequiredFieldsException | DuplicateUserException
-               | ServiceNotFoundException | PhysicianNullException e) {
+               | ServiceNotFoundException | PhysicianNullException | NotPermittedException e) {
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(ApiResponse.error("Failed to create physician: " + e.getMessage()));
@@ -137,13 +137,24 @@ public class AdminController {
 
     }
 
-    @DeleteMapping("/appointment/delete/{appointmentId}")
-    public ResponseEntity<ApiResponse<Void>> deleteAppointment(@PathVariable Long appointmentId) {
+    @DeleteMapping("/appointment/delete/{physicianId}/{appointmentId}")
+    public ResponseEntity<ApiResponse<Void>> deleteAppointment(
+            @PathVariable Long physicianId,
+            @PathVariable Long appointmentId) {
 
-        appointmentService.deleteAppointment(appointmentId);
+        try {
+            appointmentService.deleteAppointment(physicianId, appointmentId);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .body(ApiResponse.success("Appointment is deleted successfully", null));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body(ApiResponse.success("Appointment is deleted successfully", null));
+        }
+
+        catch (AppointmentNotFoundException | AppointmentNotBelongsToUserException e) {
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.error("Error to delete appointment: "+e.getMessage()));
+
+        }
 
     }
 

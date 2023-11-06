@@ -35,9 +35,6 @@ public class PatientController {
     private AppointmentService appointmentService;
 
     @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
     private ServiceRepository serviceRepository;
 
     private final Logger logger = LoggerFactory.getLogger(PatientController.class);
@@ -146,9 +143,5 @@ public class PatientController {
                 .success("Appointment is canceled", canceledAppointment));
 
     }
-
-    // TODO implement GET method to see a list of physicians for chosen service and chosen city
-    // TODO implement GET method to see a list of free appointments by physician
-    // TODO implement GET method to see a list of reserved appointments
 
 }

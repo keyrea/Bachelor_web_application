@@ -5,7 +5,6 @@ import com.example.demo.model.Appointment;
 import com.example.demo.model.Services;
 import com.example.demo.model.User;
 import com.example.demo.repository.AppointmentRepository;
-import com.example.demo.repository.ServiceRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

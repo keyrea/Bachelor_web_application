@@ -44,7 +44,7 @@ public class LoginController {
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
 
         // generate JWT token
-        String token = jwtTokenUtil.generateToken(userDetails);
+        String token = jwtTokenUtil.generateToken(userDetails, loginRequest.getOrganizationId());
 
         // return the token in the response
         return ResponseEntity.ok(new JwtResponse(token));

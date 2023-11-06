@@ -58,6 +58,11 @@ public class AdminService {
             throw new DuplicateUserException("Physician with the same username already exists");
         }
 
+        // compare organizationId of admin with organizationId entered for physician
+        if(!organizationService.compareOrganizationIdOfAdminWithOrganizationIdOfPhysician(physician.getOrganization().getId())){
+            throw new NotPermittedException("Admin does not have permission to create physician for this organization");
+        }
+
         // fetch organization details based on the provided organization id
         Long organizationId = physician.getOrganization().getId();
         Organization organization = organizationService.findById(organizationId);
@@ -102,6 +107,11 @@ public class AdminService {
 
             throw new MissingRequiredFieldsException("Required fields are not provided");
 
+        }
+
+        // compare organizationId of admin with organizationId entered for physician
+        if(!organizationService.compareOrganizationIdOfAdminWithOrganizationIdOfPhysician(physician.getOrganization().getId())){
+            throw new NotPermittedException("Admin does not have permission to create physician for this organization");
         }
 
         // fetch organization details based on the provided organization id
@@ -200,7 +210,6 @@ public class AdminService {
         appointment.setService(null);
 
         return appointmentRepository.save(appointment);
-
     }
 
 }

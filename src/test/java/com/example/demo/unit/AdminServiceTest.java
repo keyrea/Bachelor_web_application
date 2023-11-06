@@ -78,6 +78,10 @@ public class AdminServiceTest {
         when(userRepository.existsByUsername(providedPhysician.getUsername()))
                 .thenReturn(false);
 
+        // Mock behavior of OrganizationService.compareOrganizationIdOfAdminWithOrganizationIdOfPhysician
+        when(organizationService.compareOrganizationIdOfAdminWithOrganizationIdOfPhysician
+                (providedPhysician.getId())).thenReturn(true);
+
         // Mock behavior of passwordEncoder.encode
         when(passwordEncoder.encode(providedPhysician.getPassword()))
                 .thenReturn("my_secret_password");
